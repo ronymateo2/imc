@@ -6,13 +6,21 @@ import LabelInputContainer from "./LabelInputContainer";
 import { Label } from "./ui/label";
 type Maybe<T> = T | undefined | null;
 
+function roundTo(num: number, precision: number) {
+  const factor = Math.pow(10, precision);
+  return Math.round(num * factor) / factor;
+}
+
 export default function IMCCalculator() {
   const [heigth, setHeigth] = useState<Maybe<number>>();
   const [weight, setWeight] = useState<Maybe<number>>();
   const [imc, setIMC] = useState<Maybe<number>>();
 
   const computedIMC = () => {
-    const imc = heigth && weight ? weight / Math.pow(heigth, 2) : undefined;
+    const imc =
+      heigth && weight
+        ? roundTo(weight / Math.pow(heigth / 100, 2), 2)
+        : undefined;
     setIMC(imc);
   };
 
@@ -42,8 +50,6 @@ export default function IMCCalculator() {
             <h1 className="font-bold text-xl text-white mb-4 relative z-50">
               IMC Calculator
             </h1>
-
-            <p className="font-normal text-base text-slate-500 mb-4 relative z-50"></p>
             <LabelInputContainer>
               <Label htmlFor="heigth">heigth</Label>
               <Input
